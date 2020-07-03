@@ -49,7 +49,7 @@ type MiniMsg struct {
 
 type TokenResp struct {
 	AccessToken string `json:"access_token"`
-	ExpireIn    string `json:"expires_in"`
+	ExpireIn    int    `json:"expires_in"`
 	ErrCode     int    `json:"errcode"`
 	Errmsg      string `json:"errmsg"`
 }
@@ -60,7 +60,7 @@ func HandleMsg(msg MiniMsg) {
 
 //GenSignature 生成消息接收的时候的签名
 func GenSignature(timestamp, nonce string) string {
-	ps := []string{token, timestamp, nonce}
+	ps := []string{AccessToken, timestamp, nonce}
 	sort.Slice(ps, func(i, j int) bool {
 		return ps[i] > ps[j]
 	})

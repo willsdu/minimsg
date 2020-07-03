@@ -12,3 +12,12 @@ func TestDicSort(t *testing.T) {
 	})
 	t.Log(ps)
 }
+
+//signature=&echostr=6044848836944286472&timestamp=&nonce=
+
+func TestSignature(t *testing.T) {
+	s := "9e425999690c965802d464489fc242e7d10c4716"
+	ns := GenSignature("1593774856", "472719312")
+	t.Log(s == ns)
+
+}
