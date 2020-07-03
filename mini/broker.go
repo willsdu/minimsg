@@ -62,9 +62,9 @@ func HandleMsg(msg MiniMsg) {
 func GenSignature(timestamp, nonce string) string {
 	ps := []string{AccessToken, timestamp, nonce}
 	sort.Slice(ps, func(i, j int) bool {
-		return ps[i] > ps[j]
+		return ps[i] < ps[j]
 	})
-	return fmt.Sprintf("%x", sha1.Sum([]byte(strings.Join(ps, ","))))
+	return fmt.Sprintf("%x", sha1.Sum([]byte(strings.Join(ps, ""))))
 }
 
 func GetToken() string {
