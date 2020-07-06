@@ -59,5 +59,6 @@ func Broker(c *gin.Context) {
 func main() {
 	r := gin.Default()
 	r.GET("/mini/msg", Broker)
+	r.POST("/mini/msg", Broker)
 	r.Run(":3305")
 }
