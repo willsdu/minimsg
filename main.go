@@ -27,8 +27,7 @@ func Check(c *gin.Context) {
 func PostMsgHandle(c *gin.Context) {
 	timestamp := c.Query("timestamp")
 	nonce := c.Query("nonce")
-	msgEncrypt := c.Query("msg_encrypt")
-	if timestamp == "" || nonce == "" || msgEncrypt == "" {
+	if timestamp == "" || nonce == "" {
 		c.String(http.StatusBadRequest, "")
 		return
 	}
