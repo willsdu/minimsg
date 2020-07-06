@@ -25,14 +25,26 @@ func Check(c *gin.Context) {
 	c.String(http.StatusBadRequest, "")
 }
 func PostMsgHandle(c *gin.Context) {
+	timestamp := c.Query("timestamp")
+	nonce := c.Query("nonce")
+	msgEncrypt := c.Query("msg_encrypt")
+	if timestamp == "" || nonce == "" || msgEncrypt == "" {
+		c.String(http.StatusBadRequest, "")
+		return
+	}
 	msg := mini.MiniMsg{}
-	if err := c.BindJSON(&msg); err != nil {
+	if err := c.BindXML(&msg); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errmsg": err.Error(),
 		})
 		return
 	}
-	go mini.HandleMsg(msg)
+	if msg.Encrypt != mini.CheckEncrpyt(timestamp, nonce, msg.Encrypt) {
+		c.String(http.StatusBadRequest, "")
+		return
+	}
+	msgContent, err := mini.DecodeMsg(msg)
+	log.Printf("msg is %+v, err is %v", msgContent, err)
 	c.String(200, "success")
 }
 

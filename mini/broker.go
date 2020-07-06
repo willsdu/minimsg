@@ -1,20 +1,17 @@
 package mini
 
 import (
-	"crypto/sha1"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"sort"
-	"strings"
 )
 
 /*
 接收消息小程序客服消息接口
 */
 const (
-	token       = "mmschool"
+	Token       = "mmschool"
 	EncryptCode = "OxNryzORnx5XVbPDCoKDyMQH5vxbkG4DrkpGWKRasfO"
 	AppId       = "wxf0db6bd724116144"
 	AppSecret   = "81141bad72ccd3d31541f21863651e62"
@@ -24,27 +21,28 @@ var AccessToken = GetToken()
 
 type MiniMsg struct {
 	//小程序的原始ID
-	ToUserName string
+	ToUserName string `xml:"ToUserName"`
 	//发送者的openid
-	FromUserName string
+	FromUserName string `xml:"FromUserName"`
 	//消息创建时间(整型）
-	CreateTime int64
-	MsgType    string
+	CreateTime int64  `xml:"CreateTime"`
+	MsgType    string `xml:"MsgType"`
 	//消息id，64位整型
-	MsgId string
+	MsgId string `xml:"MsgId"`
 	//文本消息内容
-	Content string `json:"omitempty"`
+	Content string `json:"omitempty" xml:"Content"`
 	//图片链接（由系统生成）
-	PicUrl string `json:"omitempty"`
+	PicUrl string `json:"omitempty" xml:"PicUrl"`
 	//图片消息媒体id，可以调用[获取临时素材]((getTempMedia)接口拉取数据。
-	MediaId      string `json:"omitempty"`
-	Title        string `json:"omitempty"`
-	AppId        string `json:"omitempty"`
-	PagePath     string `json:"omitempty"`
-	ThumbUrl     string `json:"omitempty"`
-	ThumbMediaId string `json:"omitempty"`
-	Event        string `json:"omitempty"`
-	SessionFrom  string `json:"omitempty"`
+	MediaId      string `json:"omitempty" xml:"MediaId"`
+	Title        string `json:"omitempty" xml:"Title"`
+	AppId        string `json:"omitempty" xml:"AppId"`
+	PagePath     string `json:"omitempty" xml:"PagePath"`
+	ThumbUrl     string `json:"omitempty" xml:"ThumbUrl"`
+	ThumbMediaId string `json:"omitempty" xml:"ThumbMediaId"`
+	Event        string `json:"omitempty" xml:"Event"`
+	SessionFrom  string `json:"omitempty" xml:"SessionFrom"`
+	Encrypt      string `json:"omitempty" xml:"Encrypt"`
 }
 
 type TokenResp struct {
@@ -54,21 +52,25 @@ type TokenResp struct {
 	Errmsg      string `json:"errmsg"`
 }
 
-func HandleMsg(msg MiniMsg) {
-
+type ImgMsg struct {
+	ToUser  string     `json:"touser"`
+	MsgType string     `json:"msgtype"`
+	Image   ImageMedia `json:"image"`
+}
+type ImageMedia struct {
+	MediaId string `json:"media_id"`
 }
 
-//GenSignature 生成消息接收的时候的签名
-func GenSignature(timestamp, nonce string) string {
-	ps := []string{token, timestamp, nonce}
-	sort.Slice(ps, func(i, j int) bool {
-		return ps[i] < ps[j]
-	})
-	h := sha1.New()
-	str := strings.Join(ps, "")
-	h.Write([]byte([]byte(str)))
-	log.Printf("token %s, timestamp %s, nonce %s,signature %x", AccessToken, timestamp, nonce, h.Sum(nil))
-	return fmt.Sprintf("%x", h.Sum(nil))
+
+//http://simg01.gaodunwangxiao.com/v/Uploads/avatar/000/00/00/1536739621__avatar_ori.jpg
+
+//SendCustomMsg 发送客服消息
+func SendCustomMsg(msg ImgMsg) {
+	//url := fmt.Sprintf("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=%s", AccessToken)
+	//
+	//payload, _ := json.Marshal(msg)
+	//
+
 }
 
 func GetToken() string {
