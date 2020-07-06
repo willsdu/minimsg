@@ -20,7 +20,7 @@ const (
 	AppSecret   = "81141bad72ccd3d31541f21863651e62"
 )
 
-var AccessToken = "35_LwxBsdLQIvTFDOdxm7IykWFF9fgMG3h2MkA_DmvZcxaWdNRYaQ9giuTyM7GlLIImGae6i99Wunr96CwaQWiYcBXxix3P8Z_oGlHdpHhLquCxjYeSloPRoyvX66Jmau4g8vBC6B3i01F9MSyXSFUaAJAXKZ"
+var AccessToken = GetToken()
 
 type MiniMsg struct {
 	//小程序的原始ID
