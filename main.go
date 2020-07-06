@@ -27,6 +27,7 @@ func Check(c *gin.Context) {
 func PostMsgHandle(c *gin.Context) {
 	timestamp := c.Query("timestamp")
 	nonce := c.Query("nonce")
+	msgSignature := c.Query("msg_signature")
 	if timestamp == "" || nonce == "" {
 		c.String(http.StatusBadRequest, "")
 		return
@@ -40,7 +41,7 @@ func PostMsgHandle(c *gin.Context) {
 		return
 	}
 	log.Printf("msg is %+v", msg)
-	if msg.Encrypt != mini.CheckEncrpyt(timestamp, nonce, msg.Encrypt) {
+	if msgSignature != mini.CheckEncrpyt(timestamp, nonce, msg.Encrypt) {
 		log.Printf("Encrypt msg is %+v", msg)
 		c.String(http.StatusBadRequest, "")
 		return
