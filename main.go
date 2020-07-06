@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"log"
 	"minimsg/mini"
 	"net/http"
 )
@@ -15,6 +16,7 @@ func Check(c *gin.Context) {
 		c.String(http.StatusBadRequest, "")
 		return
 	}
+	log.Printf("signature %s, timestamp %s, nonce %s, echostr %s", signature, timestamp, nonce, echostr)
 	localSign := mini.GenSignature(timestamp, nonce)
 	if localSign == signature {
 		c.String(200, echostr)
