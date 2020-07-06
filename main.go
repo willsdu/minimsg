@@ -33,6 +33,7 @@ func PostMsgHandle(c *gin.Context) {
 	}
 	msg := mini.MiniMsg{}
 	if err := c.BindXML(&msg); err != nil {
+		log.Printf("err %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errmsg": err.Error(),
 		})
