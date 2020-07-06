@@ -6,7 +6,8 @@ import (
 	"crypto/cipher"
 	"crypto/sha1"
 	"encoding/base64"
-	"encoding/json"
+	"encoding/binary"
+	"encoding/xml"
 	"fmt"
 	"log"
 	"sort"
@@ -84,8 +85,18 @@ func DecodeMsg(msg MiniMsg) (MiniMsg, error) {
 	if err1 != nil {
 		return MiniMsg{}, err1
 	}
+	buf := bytes.NewBuffer(tpass[16:20])
+	var length int32
+	binary.Read(buf, binary.BigEndian, &length)
+
+	appIdStart := 20 + length
+
+	id := tpass[appIdStart : int(appIdStart)+len(AppId)]
+	if string(id) != AppId {
+		return MiniMsg{}, fmt.Errorf("invalid appid")
+	}
 	result := MiniMsg{}
-	err = json.Unmarshal(tpass, &result)
-	log.Printf("msg content is %+v",result)
+	err = xml.Unmarshal(tpass[20:20+length], &result)
+	log.Printf("msg content is %+v", result)
 	return result, err
 }
