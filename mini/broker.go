@@ -64,6 +64,7 @@ func GenSignature(timestamp, nonce string) string {
 	sort.Slice(ps, func(i, j int) bool {
 		return ps[i] < ps[j]
 	})
+	log.Printf("token %s, timestamp %s, nonce %s,signature %x", AccessToken, timestamp, nonce, sha1.Sum([]byte(strings.Join(ps, ""))))
 	return fmt.Sprintf("%x", sha1.Sum([]byte(strings.Join(ps, ""))))
 }
 
