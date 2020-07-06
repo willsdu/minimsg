@@ -82,5 +82,6 @@ func GetToken() string {
 		log.Printf("decode msg error %v", err)
 		return ""
 	}
+	log.Printf("token is %s", tokenResp.AccessToken)
 	return tokenResp.AccessToken
 }
