@@ -20,7 +20,7 @@ const (
 	AppSecret   = "81141bad72ccd3d31541f21863651e62"
 )
 
-var AccessToken = GetToken()
+var AccessToken = "35_LwxBsdLQIvTFDOdxm7IykWFF9fgMG3h2MkA_DmvZcxaWdNRYaQ9giuTyM7GlLIImGae6i99Wunr96CwaQWiYcBXxix3P8Z_oGlHdpHhLquCxjYeSloPRoyvX66Jmau4g8vBC6B3i01F9MSyXSFUaAJAXKZ"
 
 type MiniMsg struct {
 	//小程序的原始ID
@@ -60,12 +60,15 @@ func HandleMsg(msg MiniMsg) {
 
 //GenSignature 生成消息接收的时候的签名
 func GenSignature(timestamp, nonce string) string {
-	ps := []string{AccessToken, timestamp, nonce}
+	ps := []string{token, timestamp, nonce}
 	sort.Slice(ps, func(i, j int) bool {
 		return ps[i] < ps[j]
 	})
-	log.Printf("token %s, timestamp %s, nonce %s,signature %x", AccessToken, timestamp, nonce, sha1.Sum([]byte(strings.Join(ps, ""))))
-	return fmt.Sprintf("%x", sha1.Sum([]byte(strings.Join(ps, ""))))
+	h := sha1.New()
+	str := strings.Join(ps, "")
+	h.Write([]byte([]byte(str)))
+	log.Printf("token %s, timestamp %s, nonce %s,signature %x", AccessToken, timestamp, nonce, h.Sum(nil))
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
 func GetToken() string {
