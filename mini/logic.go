@@ -75,8 +75,7 @@ func AesDecrypt(crypted, key []byte) ([]byte, error) {
 
 //DecodeMsg 解密得出消息提
 func DecodeMsg(msg MiniMsg) (MiniMsg, error) {
-	realBytes := []byte{}
-	_, err := base64.StdEncoding.Decode(realBytes, []byte(msg.Encrypt))
+	realBytes, err := base64.StdEncoding.DecodeString(msg.Encrypt)
 	if err != nil {
 		log.Printf("decode msg error %v", err)
 		return MiniMsg{}, err
