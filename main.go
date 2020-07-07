@@ -28,26 +28,33 @@ func PostMsgHandle(c *gin.Context) {
 	timestamp := c.Query("timestamp")
 	nonce := c.Query("nonce")
 	msgSignature := c.Query("msg_signature")
-	if timestamp == "" || nonce == "" {
+	if timestamp == "" || nonce == "" || msgSignature == "" {
+		log.Printf("invalid params")
 		c.String(http.StatusBadRequest, "")
 		return
 	}
-	msg := mini.MiniMsg{}
+	msg := mini.EncodedReceiveMsg{}
 	if err := c.BindXML(&msg); err != nil {
-		log.Printf("err %v", err)
+		log.Printf("BindXML error %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errmsg": err.Error(),
 		})
 		return
 	}
 	log.Printf("msg is %+v", msg)
-	if msgSignature != mini.CheckEncrpyt(timestamp, nonce, msg.Encrypt) {
-		log.Printf("Encrypt msg is %+v", msg)
+	if msgSignature != mini.GenEncrpyt(timestamp, nonce, msg.Encrypt) {
+		log.Printf("GenEncrpyt %+v is not mathed", msg)
 		c.String(http.StatusBadRequest, "")
 		return
 	}
 	msgContent, err := mini.DecodeMsg(msg)
-	log.Printf("msg is %+v, err is %v", msgContent, err)
+	if err != nil {
+		log.Printf("DecodeMsg %+v error %+v", msg, err)
+		c.String(http.StatusBadRequest, "")
+		return
+	}
+	err = mini.EncodeAndSend(msgContent, nonce, timestamp)
+	log.Printf("send msg is %+v, err is %v", msgContent, err)
 	c.String(200, "success")
 }
 
