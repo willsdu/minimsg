@@ -138,5 +138,5 @@ func EncodeAndSend(msg MiniMsg, nonce string, timestamp string) error {
 		return err
 	}
 	log.Printf("send img is %s", string(paylaod))
-	return SendCustomMsg(paylaod)
+	return SendCustomMsg([]byte(paylaod))
 }
