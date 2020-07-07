@@ -58,12 +58,12 @@ type TokenResp struct {
 }
 
 type ImgMsg struct {
-	ToUser  string     `json:"touser"`
-	MsgType string     `json:"msgtype"`
-	Image   ImageMedia `json:"image"`
+	ToUser  string     `xml:"touser"`
+	MsgType string     `xml:"msgtype"`
+	Image   ImageMedia `xml:"image"`
 }
 type ImageMedia struct {
-	MediaId string `json:"media_id"`
+	MediaId string `xml:"media_id"`
 }
 
 //EncodeMsg 接收来的消息

@@ -79,7 +79,7 @@ func EncodeMsg(msg ImgMsg) (string, error) {
 }
 
 //EncodeMiniImgMsg 加密消息
-func EncodeMiniImgMsg(toUser, nonce string, timestamp string) ([]byte, error) {
+func EncodeMiniImgMsg(toUser, nonce string, timestamp string) (string, error) {
 	imgMsg := ImgMsg{
 		ToUser:  toUser,
 		MsgType: "image",
@@ -89,7 +89,7 @@ func EncodeMiniImgMsg(toUser, nonce string, timestamp string) ([]byte, error) {
 	}
 	encryptMsg, err := EncodeMsg(imgMsg)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	msgs := EncodedRespMsg{
 		Encrypt:      encryptMsg,
@@ -98,7 +98,8 @@ func EncodeMiniImgMsg(toUser, nonce string, timestamp string) ([]byte, error) {
 		Nonce:        nonce,
 	}
 	log.Printf("detail msg is %+v", imgMsg)
-	return xml.MarshalIndent(msgs, " ", "  ")
+	content, _ := xml.MarshalIndent(msgs, " ", "  ")
+	return fmt.Sprintf("<xml>%s</xml>", string(content)), nil
 }
 
 //SendCustomMsg 发送客服消息
