@@ -59,7 +59,9 @@ func DecodeMsg(msg EncodedReceiveMsg) (MiniMsg, error) {
 }
 
 func EncodeMsg(msg ImgMsg) (string, error) {
-	payload, _ := json.Marshal(msg)
+	payload, _ := xml.Marshal(msg)
+	payloadStr := fmt.Sprintf("<xml>%s</xml>", string(payload))
+	payload = []byte(payloadStr)
 
 	buf := new(bytes.Buffer)
 	err := binary.Write(buf, binary.BigEndian, int32(len(payload)))
