@@ -118,11 +118,11 @@ func SendCustomMsg(data []byte) error {
 	defer resp.Body.Close()
 	baseResp := TokenResp{}
 	if err := json.NewDecoder(resp.Body).Decode(&baseResp); err != nil {
-		log.Printf(" Decode sendCustMsg  %+v resp error",  string(data), err)
+		log.Printf(" Decode sendCustMsg  %+v resp error", string(data), err)
 		return err
 	}
 	if baseResp.ErrCode > 0 {
-		log.Printf(" send sendCustMsg  %+v error %+v",  string(data), baseResp)
+		log.Printf(" send sendCustMsg  %+v error %+v", string(data), baseResp)
 		return err
 	}
 	return nil
@@ -133,5 +133,6 @@ func EncodeAndSend(msg MiniMsg, nonce string, timestamp string) error {
 	if err != nil {
 		return err
 	}
+	log.Printf("send img is %s", string(paylaod))
 	return SendCustomMsg(paylaod)
 }
