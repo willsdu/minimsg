@@ -10,10 +10,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 )
 
-const ImgUrl = "http://simg01.gaodunwangxiao.com/v/Uploads/avatar/000/00/00/1536739621__avatar_ori.jpg"
+const MediaId = "D5QTs6tockb101m-8yx-BpjTFgvs-3EL7ga6CgMVdP0pFAyXuiUfGubAWpNsdk9e"
 
 func GetToken() string {
 	url := fmt.Sprintf("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s", AppId, AppSecret)
@@ -87,23 +86,11 @@ func EncodeMiniImgMsg(toUser, nonce string, timestamp string) (string, error) {
 		ToUser:  toUser,
 		MsgType: "image",
 		Image: ImageMedia{
-			MediaId: ImgUrl,
+			MediaId: MediaId,
 		},
 	}
-	encryptMsg, err := EncodeMsg(imgMsg)
-	if err != nil {
-		return "", err
-	}
-	msgs := EncodedRespMsg{
-		Encrypt:      encryptMsg,
-		MsgSignature: GenEncrpyt(timestamp, nonce, encryptMsg),
-		TimeStamp:    timestamp,
-		Nonce:        nonce,
-	}
-	log.Printf("detail msg is %+v", imgMsg)
-	content, _ := xml.MarshalIndent(msgs, " ", "  ")
-	result := strings.Replace(string(content), "EncodedRespMsg", "xml", -1)
-	return result, nil
+	payload, _ := json.Marshal(imgMsg)
+	return string(payload), nil
 }
 
 //SendCustomMsg 发送客服消息
@@ -129,7 +116,7 @@ func SendCustomMsg(data []byte) error {
 	}
 	if baseResp.ErrCode > 0 {
 		log.Printf(" send sendCustMsg  %+v error %+v", string(data), baseResp)
-		return err
+		return fmt.Errorf("send failed %s", baseResp.Errmsg)
 	}
 	return nil
 }
