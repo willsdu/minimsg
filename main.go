@@ -54,7 +54,7 @@ func PostMsgHandle(c *gin.Context) {
 		return
 	}
 	err = mini.EncodeAndSend(msgContent, nonce, timestamp)
-	log.Printf("send msg is %+v, err is %v", msgContent, err)
+	log.Printf("send msg result is %v", err)
 	c.String(200, "success")
 }
 
