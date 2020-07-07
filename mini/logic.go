@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
 const ImgUrl = "http://simg01.gaodunwangxiao.com/v/Uploads/avatar/000/00/00/1536739621__avatar_ori.jpg"
@@ -101,7 +102,8 @@ func EncodeMiniImgMsg(toUser, nonce string, timestamp string) (string, error) {
 	}
 	log.Printf("detail msg is %+v", imgMsg)
 	content, _ := xml.MarshalIndent(msgs, " ", "  ")
-	return fmt.Sprintf("<xml>%s</xml>", string(content)), nil
+	result := strings.Replace(string(content), "EncodedRespMsg", "xml", -1)
+	return result, nil
 }
 
 //SendCustomMsg 发送客服消息
