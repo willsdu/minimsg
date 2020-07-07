@@ -80,7 +80,8 @@ func DecodeMsg(msg MiniMsg) (MiniMsg, error) {
 		log.Printf("decode msg error %v", err)
 		return MiniMsg{}, err
 	}
-	tpass, err1 := AesDecrypt(realBytes, []byte(EncryptCode))
+	aesKey, _ := base64.StdEncoding.DecodeString(EncryptCode + "=")
+	tpass, err1 := AesDecrypt(realBytes, aesKey)
 	if err1 != nil {
 		return MiniMsg{}, err1
 	}
