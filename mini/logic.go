@@ -97,6 +97,7 @@ func EncodeMiniImgMsg(toUser, nonce string, timestamp string) ([]byte, error) {
 		TimeStamp:    timestamp,
 		Nonce:        nonce,
 	}
+	log.Printf("detail msg is %+v", imgMsg)
 	return xml.MarshalIndent(msgs, " ", "  ")
 }
 
