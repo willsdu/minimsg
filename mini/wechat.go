@@ -65,17 +65,20 @@ type ImgMsg struct {
 type ImageMedia struct {
 	MediaId string `json:"media_id" xml:"media_id"`
 }
+//TextMsg  文字消息
+type TextMsg struct {
+	ToUser  string     `json:"touser" xml:"touser"`
+	MsgType string     `json:"msgtype" xml:"msgtype"`
+	Text   TextObject `json:"text" xml:"text"`
+}
+type TextObject struct {
+	Content string `json:"content" xml:"content"`
+}
 
 //EncodeMsg 接收来的消息
 type EncodedReceiveMsg struct {
 	ToUserName string `xml:"ToUserName"`
 	Encrypt    string `xml:"Encrypt"`
-}
-type EncodedRespMsg struct {
-	Encrypt      string `xml:"Encrypt"`
-	MsgSignature string `xml:"MsgSignature"`
-	TimeStamp    string `xml:"TimeStamp"`
-	Nonce        string `xml:"Nonce"`
 }
 
 func Sha1Slice(strs []string) string {

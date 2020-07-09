@@ -122,6 +122,17 @@ func SendCustomMsg(data []byte) error {
 }
 
 func EncodeAndSend(msg MiniMsg, nonce string, timestamp string) error {
+	UserTextMsg := `我要进群学习\n1.点击下方老师二维码\n2.长按识别二维码添加`
+	textMsg := TextMsg{
+		ToUser:  msg.FromUserName,
+		MsgType: "image",
+		Text: TextObject{
+			Content: UserTextMsg,
+		},
+	}
+	textPayload, _ := json.Marshal(textMsg)
+	SendCustomMsg([]byte(textPayload))
+
 	paylaod, err := EncodeMiniImgMsg(msg.FromUserName, nonce, timestamp)
 	if err != nil {
 		return err
